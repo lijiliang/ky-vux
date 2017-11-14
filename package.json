@@ -1,8 +1,8 @@
 {
-  "name": "vux-test",
+  "name": "ky-vux",
   "version": "1.0.0",
-  "description": "A Vue.js project",
-  "author": "Benson <>",
+  "description": "ky-vux",
+  "author": "Benson <1951828835@qq.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
