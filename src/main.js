@@ -1,6 +1,9 @@
 import Vue from 'vue'
+import FastClick from 'fastclick'
 import App from './App'
-import router from './router'
+import router from './base/router'
+
+FastClick.attach(document.body)
 
 Vue.config.productionTip = false
 

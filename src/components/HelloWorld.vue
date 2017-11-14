@@ -7,10 +7,11 @@
 </template>
 
 <script>
-import { Group, Cell } from 'vux'
+import { ViewBox, Group, Cell } from 'vux'
 
 export default {
   components: {
+    ViewBox,
     Group,
     Cell
   }
