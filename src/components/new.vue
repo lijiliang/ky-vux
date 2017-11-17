@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <group>
       <cell title="title sdd" value="value"></cell>
     </group>

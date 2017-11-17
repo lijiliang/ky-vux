@@ -1,17 +1,22 @@
 <template>
   <div id="app">
-    <view-box ref="viewBox">
+
+    <div v-transfer-dom>
+      <loading v-model="isLoading"></loading>
+    </div>
+
+    <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
       <x-header slot="header" title="kyani" class="header" :left-options="{showBack: true, backText: ''}">
         <!-- <div slot="left">left</div> -->
         <div>kyani</div>
       </x-header>
       <router-view></router-view>
       <tabbar slot="bottom" class="m-tabbar">
-        <tabbar-item selected>
+        <tabbar-item :link="{path:'/'}">
           <i slot="icon" class="icon icon-Kyani"></i>
           <span slot="label">首页</span>
         </tabbar-item>
-        <tabbar-item>
+        <tabbar-item :link="{path:'/new'}">
           <i slot="icon" class="icon icon-news"></i>
           <span slot="label">最新消息</span>
         </tabbar-item>
@@ -34,14 +39,32 @@
 </template>
 
 <script>
-import {ViewBox, XHeader, Tabbar, TabbarItem} from 'vux'
+import {ViewBox, XHeader, Tabbar, TabbarItem, Loading, TransferDom} from 'vux'
+import { mapState } from 'vuex'
 export default {
   name: 'app',
+  directives: {
+    TransferDom
+  },
+  data () {
+    return {
+      height: window.innerHeight - 46 - 53
+    }
+  },
   components: {
     ViewBox,
     XHeader,
     Tabbar,
-    TabbarItem
+    TabbarItem,
+    Loading
+  },
+
+  computed: {
+    ...mapState({
+      route: state => state.route,
+      // path: state => state.router.path,
+      isLoading: state => state.vux.isLoading
+    })
   }
 }
 </script>
