@@ -3,20 +3,20 @@
     <group>
       <cell title="title sdd" value="value"></cell>
     </group>
-    <Menu />
+    <k-menu />
   </div>
 </template>
 
 <script>
 import { ViewBox, Group, Cell } from 'vux'
-import Menu from '@/components/Menu'
+import KMenu from '@/components/KMenu'
 
 export default {
   components: {
     ViewBox,
     Group,
     Cell,
-    Menu
+    KMenu
   }
 }
 </script>

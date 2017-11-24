@@ -12,7 +12,7 @@
       >
       <!-- drawer start -->
       <div slot="drawer" >
-        <Menu />
+        <k-menu />
       </div>
       <!-- drawer end -->
 
@@ -66,9 +66,9 @@
 
 <script>
 import {ViewBox, XHeader, Drawer, Tabbar, TabbarItem, Loading, TransferDom} from 'vux'
-import Menu from '@/components/Menu'
+import KMenu from '@/components/KMenu'
 import { mapState } from 'vuex'
-console.log(Menu)
+console.log(KMenu)
 export default {
   name: 'app',
   directives: {
@@ -86,7 +86,7 @@ export default {
     Tabbar,
     TabbarItem,
     Loading,
-    Menu
+    KMenu
   },
 
   computed: {
