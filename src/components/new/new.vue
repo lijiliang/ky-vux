@@ -9,7 +9,7 @@
 
 <script>
 import { ViewBox, Group, Cell } from 'vux'
-import KMenu from '@/components/KMenu'
+import KMenu from '@/components/common/KMenu'
 
 export default {
   components: {

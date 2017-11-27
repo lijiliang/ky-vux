@@ -142,7 +142,6 @@
 export default {
   name: 'Menu',
   created () {
-    console.log('menu')
   }
 }
 </script>

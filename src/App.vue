@@ -28,15 +28,16 @@
               <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-3px;"></x-icon>
             </span>
           <div v-if="route.path === '/'" class="k-logo"><i class="icon icon-Kyani"></i></div>
+          <div slot="right" ><router-link to="login">注册 / 登录</router-link></div>
         </x-header>
         
         <transition
-          @after-enter="$vux.bus && $vux.bus.$emit('vux:after-view-enter')"
           :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')">
             <router-view class="router-view"></router-view>
         </transition>
+        <!-- @after-enter="$vux.bus && $vux.bus.$emit('vux:after-view-enter')" -->
 
-        <tabbar slot="bottom" class="m-tabbar">
+        <tabbar slot="bottom" class="m-tabbar" v-show="!isTabbar">
           <tabbar-item :link="{path:'/'}" :selected="route.path === '/'">
             <i slot="icon" class="icon icon-Kyani"></i>
             <span slot="label">首页</span>
@@ -53,7 +54,7 @@
             <i slot="icon" class="icon icon-shoppingCart"></i>
             <span slot="label">购物车</span>
           </tabbar-item>
-          <tabbar-item>
+          <tabbar-item :link="{path:'/login'}" :selected="route.path === '/login'">
             <i slot="icon" class="icon icon-login"></i>
             <span slot="label">我的</span>
           </tabbar-item>
@@ -66,9 +67,9 @@
 
 <script>
 import {ViewBox, XHeader, Drawer, Tabbar, TabbarItem, Loading, TransferDom} from 'vux'
-import KMenu from '@/components/KMenu'
+import KMenu from '@/components/common/KMenu'
 import { mapState } from 'vuex'
-console.log(KMenu)
+
 export default {
   name: 'app',
   directives: {
@@ -88,7 +89,9 @@ export default {
     Loading,
     KMenu
   },
-
+  created () {
+    console.log(this)
+  },
   computed: {
     ...mapState({
       route: state => state.route,
@@ -104,9 +107,13 @@ export default {
     title () {
       if (this.route.path === '/') return 'Home'
       if (this.route.path === '/new') return '最新消息'
+      if (this.route.path === '/login') return '登录我的帐户'
     },
     headerTransition () {
       return this.direction === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
+    },
+    isTabbar () {
+      return /login|aaa/.test(this.route.path)
     }
   }
 }
