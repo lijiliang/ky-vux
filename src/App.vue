@@ -16,7 +16,7 @@
       </div>
       <!-- drawer end -->
 
-      <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
+      <view-box ref="viewBox" body-padding-top="46px" :body-padding-bottom="bodyPaddingBobbom">
         <x-header slot="header" 
           style="width:100%;position:absolute;left:0;top:0;z-index:100;"
           :title="title" 
@@ -25,10 +25,10 @@
           :transition="headerTransition"
         >
           <span v-if="route.path === '/' || route.path === '/component/drawer'" slot="overwrite-left" @click="drawerVisibility = !drawerVisibility">
-              <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-3px;"></x-icon>
+              <x-icon type="navicon" size="35" style="fill:#332500;position:relative;top:-8px;left:-3px;"></x-icon>
             </span>
           <div v-if="route.path === '/'" class="k-logo"><i class="icon icon-Kyani"></i></div>
-          <div slot="right" ><router-link to="login">注册 / 登录</router-link></div>
+          <div slot="right" v-if="route.path !== '/login'"><router-link to="login">注册 / 登录</router-link></div>
         </x-header>
         
         <transition
@@ -107,13 +107,16 @@ export default {
     title () {
       if (this.route.path === '/') return 'Home'
       if (this.route.path === '/new') return '最新消息'
-      if (this.route.path === '/login') return '登录我的帐户'
+      if (this.route.path === '/login') return '登录'
     },
     headerTransition () {
       return this.direction === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
     },
     isTabbar () {
       return /login|aaa/.test(this.route.path)
+    },
+    bodyPaddingBobbom () {
+      return /login/.test(this.route.path) ? '0px' : '55px'
     }
   }
 }
@@ -122,11 +125,27 @@ export default {
 <style lang="less">
 @import '~vux/src/styles/reset.less';
 @import './base/resources/less/iconfont.less';
+@import '~varLess';
 html, body {
     height: 100%;
     width: 100%;
     overflow-x: hidden;
   }
+.vux-header .vux-header-left,
+.vux-header .vux-header-left a,
+.vux-header .vux-header-left button,
+.vux-header .vux-header-right,
+.vux-header .vux-header-right .left-arrow,
+.vux-header .vux-header-right a,
+.vux-header .vux-header-right button,
+.vux-header .vux-header-title,
+.vux-header h1 {
+    color: #332500!important;
+}
+.vux-header h1,
+.weui-tab .vux-header .vux-header-title {
+    font-size: 16px;
+}
 #app{
   height: 100%;
   .header{
@@ -135,10 +154,16 @@ html, body {
     left:0;
     top:0;
     z-index:100;
+    background: #fff;
+    border: 1px solid #f1f1f1;
+  }
+  .vux-header .vux-header-left .left-arrow:before{
+    border-color: #332500;
   }
   .k-logo{
     .icon{
       font-size: 32px;
+      color: #002e5e;
     }
   }
 }
