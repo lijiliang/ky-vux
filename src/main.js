@@ -4,6 +4,13 @@ import App from './App'
 import { sync } from 'vuex-router-sync'
 import router from './base/router'
 import store from './base/vuex/store'
+// import VeeValidate from 'vee-validate'
+
+// const configValidate = {
+//   errorBagName: 'errorsv', // change if property conflicts
+//   fieldsBagName: 'fields'
+// }
+// Vue.use(VeeValidate, configValidate)
 
 sync(store, router, {moduleName: 'route'})
 

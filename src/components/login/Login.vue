@@ -2,10 +2,10 @@
   <div class="m-login">
     <div class="login-logo"><i class="icon icon-Kyani"></i></div>
     <group class="login-group">
-      <x-input title="必须输入2333" novalidate required @on-blur="onBlur" @on-change="change" placeholder="请输入您的中国会员帐号">
+      <x-input required is-type="email" placeholder="请输入您的中国会员帐号">
          <i slot="label" class="icon icon-memberNo"></i>
       </x-input>
-      <x-input title="必须输入2333" placeholder="请输入您的密码" :type="this.isEye ? 'text' : 'password'">
+      <x-input placeholder="请输入您的密码" :type="this.isEye ? 'text' : 'password'">
          <i slot="label" class="icon icon-password"></i>
          <i slot="right" :class="this.isEye ? 'icon icon-eye eye-pwd' : 'icon icon-eye'" @click="changePwdType"></i>
       </x-input>
@@ -73,7 +73,7 @@ export default {
   .login-logo{
     padding: 8vw 0;
     text-align: center;
-    color: #236194;
+    color: #002e5e;  //#236194;
     .icon{
       font-size: (100 / 750) * 100vw;
     }
@@ -127,9 +127,9 @@ export default {
           font-size: 3.8vw;
         }
         .weui-icon-success-circle{
-          color: #54acae;
+          color: #002e5e;
           &:before{
-            color: #54acae;
+            color: #002e5e;
           }
         }
       }
@@ -137,8 +137,12 @@ export default {
     .login-btn{
       height: 10.9vw;
       .fontvw(38);
-      background: #54acae;
+      background: #002e5e;
       border-radius: (10 / 750) * 100vw;
+      line-height: inherit;
+      &:active{
+        background: #002e5e;
+      }
     }
   }
   .account-other{
@@ -152,10 +156,14 @@ export default {
       color: #999;
     }
     .account-btn{
-      border: 1px solid #54acae;
+      border: 1px solid #002e5e;
       background: #fff;
-      color: #54acae;
-      .fontvw(38)
+      color: #002e5e;
+      .fontvw(38);
+      &:active{
+        background: #fff;
+        color: #002e5e;
+      }
     }
   }
 }
