@@ -2,10 +2,23 @@
   <div class="m-login">
     <div class="login-logo"><i class="icon icon-Kyani"></i></div>
     <group class="login-group">
-      <x-input required is-type="email" placeholder="请输入您的中国会员帐号">
+      <x-input 
+        required 
+        is-type="{valid:true, msg:错误信息}" 
+        placeholder="请输入您的中国会员帐号" 
+        v-model="username" 
+        ref="username" 
+        :should-toast-error="false">
          <i slot="label" class="icon icon-memberNo"></i>
       </x-input>
-      <x-input placeholder="请输入您的密码" :type="this.isEye ? 'text' : 'password'">
+      <x-input 
+        placeholder="请输入您的密码" 
+        v-model="password" 
+        required 
+        ref="password" 
+        is-type="{valid:true, msg:sadfasdf}" 
+        :type="this.isEye ? 'text' : 'password'"
+        :should-toast-error="false">
          <i slot="label" class="icon icon-password"></i>
          <i slot="right" :class="this.isEye ? 'icon icon-eye eye-pwd' : 'icon icon-eye'" @click="changePwdType"></i>
       </x-input>
@@ -36,7 +49,9 @@ export default {
   name: 'Login',
   data () {
     return {
-      vlaue: 'asdf',
+      username: '',
+      password: '',
+      isrequired: false,
       isEye: false,
       loginCheck: false
     }
@@ -52,7 +67,37 @@ export default {
       this.isEye = !this.isEye
     },
     loginSubmit () {
-      console.log('loginSubmit')
+      const refs = ['username', 'password']
+      refs.map((ref) => {
+        this.$refs[ref].focus()
+      })
+      // this.$refs.username.focus()
+      // this.$refs.password.focus()
+      // this.isrequired = this.$refs.username.valid
+      // this.validForm()
+      if (this.validForm()) {
+        console.log(this.username, this.password, this.loginCheck)
+      }
+    },
+    validForm () {
+      let isPass = true
+      const rules = [
+        {
+          model: 'username',
+          msg: '请输入您的中国会员帐号'
+        },
+        {
+          model: 'password',
+          msg: '请输入您的密码'
+        }
+      ]
+      rules.map((rule) => {
+        if (!this[rule.model] && isPass) {
+          this.$vux.toast.text(rule.msg, 'middle', 2000)
+          isPass = false
+        }
+      })
+      return isPass
     }
   },
   components: {
@@ -90,6 +135,9 @@ export default {
       font-size: 3.75vw;
       .weui-cell__hd{
         padding-right: 1.5vw;
+      }
+      .weui-cell__bd input::-webkie-input-placeholder{
+        color: #ccc;
       }
     }
     .icon{
