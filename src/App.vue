@@ -19,7 +19,7 @@
       <view-box ref="viewBox" body-padding-top="46px" :body-padding-bottom="bodyPaddingBobbom">
         <x-header slot="header" 
           style="width:100%;position:absolute;left:0;top:0;z-index:100;"
-          :title="title" 
+          :title="title ? title : headerTitle" 
           class="header"
           :left-options="leftOptions"
           :transition="headerTransition"
@@ -90,14 +90,14 @@ export default {
     KMenu
   },
   created () {
-    console.log(this)
   },
   computed: {
     ...mapState({
       route: state => state.route,
       path: state => state.route.path,
       isLoading: state => state.vux.isLoading,
-      direction: state => state.vux.direction
+      direction: state => state.vux.direction,
+      headerTitle: state => state.headerTitle
     }),
     leftOptions () {
       return {

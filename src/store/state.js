@@ -1,7 +1,7 @@
 // 定义 state
 
 const state = {
-  login: ''
+  newList: []
 }
 
 export default state

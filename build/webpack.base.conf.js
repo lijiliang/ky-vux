@@ -25,7 +25,8 @@ let webpackConfig = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       '@': resolve('src'),
-      varLess: resolve('src/base/resources/less/variables.less')   // less的一些变量
+      varLess: resolve('src/base/resources/less/variables.less'), // less的一些变量
+      common: resolve('src/base/common'),   // common 公用
     }
   },
   module: {
