@@ -10,7 +10,6 @@ const mutations = {
   },
   // 头部标题
   [types.HEADER_TITLE] (state, payload) {
-    console.log(payload)
     state.headerTitle = payload.title
   },
   [types.LOGIN] (state, login) {

@@ -1,7 +1,7 @@
 /**
  * @fileOverview 统一管理api url
  */
-import profile from './Profiles'
+import profile from './profiles'
 
 const Urls = {
   Login: profile.server + '/oauth/token',  // 登录

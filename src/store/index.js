@@ -18,6 +18,7 @@ export default new Vuex.Store({
   getters,
   modules: {
     vux: vuxModule
-  }
+  },
+  strict: debug // 是否开启严格模式
   // plugins: debug ? [createLogger()] : []
 })

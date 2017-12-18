@@ -28,9 +28,8 @@
               <x-icon type="navicon" size="35" style="fill:#332500;position:relative;top:-8px;left:-3px;"></x-icon>
             </span>
           <div v-if="route.path === '/'" class="k-logo"><i class="icon icon-Kyani"></i></div>
-          <div slot="right" v-if="route.path !== '/login'"><router-link to="login">注册 / 登录</router-link></div>
+          <div slot="right" v-if="route.path !== '/login'"><router-link to="/login">注册 / 登录</router-link></div>
         </x-header>
-        
         <transition
           :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')">
             <router-view class="router-view"></router-view>

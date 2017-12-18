@@ -1,7 +1,8 @@
 // 定义 state
 
 const state = {
-  newList: []
+  newList: [],
+  headerTitle: ''
 }
 
 export default state

@@ -4,11 +4,12 @@ import App from './App'
 import { sync } from 'vuex-router-sync'
 import router from './base/router'
 import store from './store'
-import { ToastPlugin, AlertPlugin } from 'vux'
+import { ToastPlugin, AlertPlugin, LoadingPlugin } from 'vux'
 
 // plugins
 Vue.use(ToastPlugin)
 Vue.use(AlertPlugin)
+Vue.use(LoadingPlugin)
 
 sync(store, router, {moduleName: 'route'})
 

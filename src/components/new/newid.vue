@@ -7,7 +7,7 @@
 <script>
 import {mapActions, mapState} from 'vuex'
 import axios from 'axios'
-import { Urls } from 'common'
+import { urls } from 'common'
 export default {
   name: 'NewId',
   data () {
@@ -18,7 +18,7 @@ export default {
   },
   created () {
     const _id = this.$route.params.id
-    axios.get(Urls.ActicleInfo + '/' + _id)
+    axios.get(urls.ActicleInfo + '/' + _id)
         .then((res) => {
           this.title = res.data.data.title
           this.content = res.data.data.content

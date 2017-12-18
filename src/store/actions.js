@@ -6,20 +6,12 @@
 
 import axios from 'axios'
 import * as types from './mutation-types'
-import { Urls } from 'common'
+import { urls } from 'common'
+import { getPublic } from 'common/fetch'
 
+// 获取最新消息列表
 export const getNewList = function ({commit}) {
-  axios.get(Urls.ActicleNews).then((res) => {
-    console.log(res)
-    commit(types.NEW_LIST, res.data.data)
-  }).catch((error) => {
-    console.log(error)
-  })
-}
-
-export const setHeaderTitle = function ({commit}) {
-  axios.get(Urls.ActicleNews).then((res) => {
-    console.log(res)
+  getPublic(urls.ActicleNews).then((res) => {
     commit(types.NEW_LIST, res.data.data)
   }).catch((error) => {
     console.log(error)

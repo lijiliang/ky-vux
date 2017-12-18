@@ -45,6 +45,11 @@
 
 <script>
 import {Group, XInput, XButton, CheckIcon} from 'vux'
+import { urls, cache } from 'common'
+import { get, postPublic } from 'common/fetch'
+import Base64 from 'js-base64'
+import queryString from 'querystring'
+
 export default {
   name: 'Login',
   data () {
@@ -77,6 +82,60 @@ export default {
       // this.validForm()
       if (this.validForm()) {
         console.log(this.username, this.password, this.loginCheck)
+        const kyaniSecurity = Base64.Base64.encode('kyani-shop:security')
+        const data = {
+          grant_type: 'password',
+          username: this.username,
+          password: this.password,
+          scope: 'read write'
+        }
+        this.$vux.loading.show({
+          text: 'Loading'
+        })
+        postPublic(urls.Login, data, {
+          headers: {
+            Authorization: 'Basic ' + kyaniSecurity,
+            Accept: 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          transformRequest: [function (data) {
+            return queryString.stringify(data)
+          }]
+        }).then((res) => {
+          this.$vux.loading.hide()
+          console.log(res)
+          const _token = res.data.access_token
+          // 保存用户名和是否记录帐户到localStorage
+          cache.set(cache.keys.ky_cache_login_account, this.username)
+          cache.set(cache.keys.ky_cache_isAccount, this.loginCheck)
+          // 保存数据到sessionStorage
+          cache.sessionSet(cache.sessionKeys.ky_cache_access_token, _token)
+
+          // 请求用户信息
+          const userInfo = get(urls.UserCurrent)
+          console.log('asdf')
+          userInfo.then((_res) => {
+            const userData = _res.data
+            if (userData.success) {
+              const _userInfo = userData.data
+              // Toast.hide()
+              // 保存数据到sessionStorage
+              cache.sessionSet(cache.sessionKeys.ky_cache_realName, _userInfo.realName)
+              cache.sessionSet(cache.sessionKeys.ky_cache_userName, _userInfo.userName)
+              cache.sessionSet(cache.sessionKeys.ky_cache_memberFlag, _userInfo.memberFlag)
+              cache.sessionSet(cache.sessionKeys.ky_cache_isLogined, true)
+              cache.sessionSet(cache.sessionKeys.ky_cache_last_login_time, new Date().getTime())
+              // 登录成功，回调
+            } else {
+              console.log(res.message)
+              // Toast.info(res.message, 1)
+            }
+          }).catch((err) => {
+            console.log(err)
+          })
+        }).catch((error) => {
+          console.log(error)
+        })
       }
     },
     validForm () {
