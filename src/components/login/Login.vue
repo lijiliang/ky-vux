@@ -49,16 +49,36 @@ import { urls, cache } from 'common'
 import { get, postPublic } from 'common/fetch'
 import Base64 from 'js-base64'
 import queryString from 'querystring'
+import { postToken, getUserCurrent } from 'api/login'
+import { showLoading, hideLoading, failLoading } from 'common/utils'
 
 export default {
   name: 'Login',
   data () {
     return {
-      username: '',
+      // username: '',
       password: '',
       isrequired: false,
       isEye: false,
       loginCheck: false
+    }
+  },
+  created () {
+    let kyCacheIsAccount = JSON.parse(cache.get(cache.keys.ky_cache_isAccount))
+    let kyCacheAccount = cache.get(cache.keys.ky_cache_login_account)
+    this.username = kyCacheIsAccount ? kyCacheAccount : ''
+    this.loginCheck = kyCacheIsAccount
+    console.log(kyCacheAccount, kyCacheIsAccount)
+  },
+  computed: {
+    username () {
+      let kyCacheIsAccount = JSON.parse(cache.get(cache.keys.ky_cache_isAccount))
+      let kyCacheAccount = cache.get(cache.keys.ky_cache_login_account)
+      return kyCacheIsAccount ? kyCacheAccount : ''
+    },
+    loginCheck () {
+      let kyCacheIsAccount = JSON.parse(cache.get(cache.keys.ky_cache_isAccount))
+      return kyCacheIsAccount
     }
   },
   methods: {
@@ -71,7 +91,7 @@ export default {
     changePwdType () {
       this.isEye = !this.isEye
     },
-    loginSubmit () {
+    async loginSubmit () {
       const refs = ['username', 'password']
       refs.map((ref) => {
         this.$refs[ref].focus()
@@ -81,61 +101,35 @@ export default {
       // this.isrequired = this.$refs.username.valid
       // this.validForm()
       if (this.validForm()) {
-        console.log(this.username, this.password, this.loginCheck)
-        const kyaniSecurity = Base64.Base64.encode('kyani-shop:security')
-        const data = {
-          grant_type: 'password',
-          username: this.username,
-          password: this.password,
-          scope: 'read write'
-        }
-        this.$vux.loading.show({
-          text: 'Loading'
-        })
-        postPublic(urls.Login, data, {
-          headers: {
-            Authorization: 'Basic ' + kyaniSecurity,
-            Accept: 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          transformRequest: [function (data) {
-            return queryString.stringify(data)
-          }]
-        }).then((res) => {
-          this.$vux.loading.hide()
-          console.log(res)
-          const _token = res.data.access_token
+        try {
+          showLoading(this)
+          this.$vux.loading.show({
+            text: '登录中...'
+          })
+          let { access_token } = await postToken(this, this.username, this.password)
           // 保存用户名和是否记录帐户到localStorage
           cache.set(cache.keys.ky_cache_login_account, this.username)
           cache.set(cache.keys.ky_cache_isAccount, this.loginCheck)
           // 保存数据到sessionStorage
-          cache.sessionSet(cache.sessionKeys.ky_cache_access_token, _token)
+          cache.sessionSet(cache.sessionKeys.ky_cache_access_token, access_token)
 
-          // 请求用户信息
-          const userInfo = get(urls.UserCurrent)
-          console.log('asdf')
-          userInfo.then((_res) => {
-            const userData = _res.data
-            if (userData.success) {
-              const _userInfo = userData.data
-              // Toast.hide()
-              // 保存数据到sessionStorage
-              cache.sessionSet(cache.sessionKeys.ky_cache_realName, _userInfo.realName)
-              cache.sessionSet(cache.sessionKeys.ky_cache_userName, _userInfo.userName)
-              cache.sessionSet(cache.sessionKeys.ky_cache_memberFlag, _userInfo.memberFlag)
-              cache.sessionSet(cache.sessionKeys.ky_cache_isLogined, true)
-              cache.sessionSet(cache.sessionKeys.ky_cache_last_login_time, new Date().getTime())
-              // 登录成功，回调
-            } else {
-              console.log(res.message)
-              // Toast.info(res.message, 1)
-            }
-          }).catch((err) => {
-            console.log(err)
-          })
-        }).catch((error) => {
-          console.log(error)
-        })
+          let userData = await getUserCurrent()
+          hideLoading(this)
+          const _userInfo = userData.data.data
+          if (_userInfo.success) {
+            // 保存数据到sessionStorage
+            cache.sessionSet(cache.sessionKeys.ky_cache_realName, _userInfo.realName)
+            cache.sessionSet(cache.sessionKeys.ky_cache_userName, _userInfo.userName)
+            cache.sessionSet(cache.sessionKeys.ky_cache_memberFlag, _userInfo.memberFlag)
+            cache.sessionSet(cache.sessionKeys.ky_cache_isLogined, true)
+            cache.sessionSet(cache.sessionKeys.ky_cache_last_login_time, new Date().getTime())
+            console.log('登录成功')
+          } else {
+            this.$vux.toast.text(_userInfo.errMsg)
+          }
+        } catch (error) {
+          failLoading(this, error)
+        }
       }
     },
     validForm () {

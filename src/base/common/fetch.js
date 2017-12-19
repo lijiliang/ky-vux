@@ -41,7 +41,16 @@ export const getPublic = (url, param) => {
  * @return {[object]}       [返回Promise]
  */
 export const postPublic = (url, param, config) => {
-  return (
+  // return (
+  //   axios.post(`${url}`, param, config)
+  // )
+  return new Promise((resolve, reject) => {
     axios.post(`${url}`, param, config)
-  )
+      .then((response) => {
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }

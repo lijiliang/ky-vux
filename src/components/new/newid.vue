@@ -6,8 +6,8 @@
 
 <script>
 import {mapActions, mapState} from 'vuex'
-import axios from 'axios'
-import { urls } from 'common'
+import { getActicleInfo } from 'api/news'
+import { showLoading, hideLoading, failLoading } from 'common/utils'
 export default {
   name: 'NewId',
   data () {
@@ -17,15 +17,23 @@ export default {
     }
   },
   created () {
-    const _id = this.$route.params.id
-    axios.get(urls.ActicleInfo + '/' + _id)
-        .then((res) => {
-          this.title = res.data.data.title
-          this.content = res.data.data.content
-          this.$store.commit('HEADER_TITLE', {title: res.data.data.title})
-        }).catch((error) => {
-          console.log(error)
-        })
+    this._getActicleInfo()
+  },
+  methods: {
+    // 获取最新消息文章内容
+    async _getActicleInfo () {
+      const _id = this.$route.params.id
+      showLoading(this)
+      try {
+        const { data } = await getActicleInfo(_id)
+        hideLoading(this)
+        this.title = data.data.title
+        this.content = data.data.content
+        this.$store.commit('HEADER_TITLE', {title: data.data.title})
+      } catch (err) {
+        failLoading(this, err)
+      }
+    }
   },
   computed: {
   }
