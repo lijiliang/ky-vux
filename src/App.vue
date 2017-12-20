@@ -28,7 +28,10 @@
               <x-icon type="navicon" size="35" style="fill:#332500;position:relative;top:-8px;left:-3px;"></x-icon>
             </span>
           <div v-if="route.path === '/'" class="k-logo"><i class="icon icon-Kyani"></i></div>
-          <div slot="right" v-if="route.path !== '/login'"><router-link to="/login">注册 / 登录</router-link></div>
+          <div slot="right" v-if="route.path !== '/login'">
+            <router-link to="/login" v-if="!isLogin">注册 / 登录</router-link>
+            <router-link to="/user" v-if="isLogin">我的帐户</router-link>
+          </div>
         </x-header>
         <transition
           :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')">
@@ -53,7 +56,7 @@
             <i slot="icon" class="icon icon-shoppingCart"></i>
             <span slot="label">购物车</span>
           </tabbar-item>
-          <tabbar-item :link="{path:'/login'}" :selected="route.path === '/login'">
+          <tabbar-item :link="{path:'/user'}" :selected="route.path === '/user'">
             <i slot="icon" class="icon icon-login"></i>
             <span slot="label">我的</span>
           </tabbar-item>
@@ -67,7 +70,8 @@
 <script>
 import {ViewBox, XHeader, Drawer, Tabbar, TabbarItem, Loading, TransferDom} from 'vux'
 import KMenu from '@/components/common/KMenu'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { cache } from 'common'
 
 export default {
   name: 'app',
@@ -98,6 +102,9 @@ export default {
       direction: state => state.vux.direction,
       headerTitle: state => state.headerTitle
     }),
+    ...mapGetters({
+      userInfo: 'userInfo'
+    }),
     leftOptions () {
       return {
         showBack: this.route.path !== '/'
@@ -107,12 +114,17 @@ export default {
       if (this.route.path === '/') return 'Home'
       if (this.route.path === '/new') return '最新消息'
       if (this.route.path === '/login') return '登录'
+      if (this.route.path === '/user') return '用户中心'
     },
     headerTransition () {
       return this.direction === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
     },
     isTabbar () {
       return /login|aaa/.test(this.route.path)
+    },
+    isLogin () {
+      const isLogined = cache.sessionGet(cache.sessionKeys.ky_cache_isLogined) || this.userInfo.isLogined
+      return isLogined
     },
     bodyPaddingBobbom () {
       return /login/.test(this.route.path) ? '0px' : '55px'

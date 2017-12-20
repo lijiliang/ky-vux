@@ -4,6 +4,7 @@ import Home from '@/components/home/Home'
 import New from '@/components/new/new'
 import NewId from '@/components/new/newid'
 import Login from '@/components/login/Login'
+import UserIndex from '@/components/user/UserIndex'
 
 Vue.use(Router)
 
@@ -41,6 +42,18 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/user',
+      name: 'User',
+      component: UserIndex,
+      meta: {
+        login: true
+      }
+    },
+    {
+      path: '*',
+      redirect: '/'    // 不存在的路径，重定向到根目录
     }
   ]
 })

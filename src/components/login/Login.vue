@@ -120,7 +120,15 @@ export default {
               isAccount: this.loginCheck, // 是否记住帐号
               token: access_token         // 用户token
             })
-            console.log('登录成功')
+
+            // 登录成功后跳转
+            let redirect = this.$route.query.redirect
+            if (!redirect) {
+              redirect = ''
+            }
+            this.$router.push({
+              path: '/' + redirect
+            })
           } else {
             this.$vux.toast.text(_userInfo.errMsg)
           }
