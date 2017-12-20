@@ -29,6 +29,10 @@ export function failLoading (that, err) {
     that.$vux.toast.text('服务器连接失败!', 'middle')
     return
   }
+  if (response.data.message === 'Bad credentials') {
+    that.$vux.toast.text('用户名或密码错误！!', 'middle')
+    return
+  }
   if (response.status === 401 && response.data.error === 'invalid_token') {
     that.$vux.toast.text('请先登录!', 'middle')
     // clearUserSession();

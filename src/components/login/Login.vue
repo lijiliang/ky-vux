@@ -45,41 +45,30 @@
 
 <script>
 import {Group, XInput, XButton, CheckIcon} from 'vux'
-import { urls, cache } from 'common'
-import { get, postPublic } from 'common/fetch'
-import Base64 from 'js-base64'
-import queryString from 'querystring'
+import { cache } from 'common'
 import { postToken, getUserCurrent } from 'api/login'
+import { USER_INFO } from 'store/mutation-types'
 import { showLoading, hideLoading, failLoading } from 'common/utils'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Login',
   data () {
     return {
-      // username: '',
+      username: cache.get(cache.keys.ky_cache_login_account) || '',
       password: '',
       isrequired: false,
       isEye: false,
-      loginCheck: false
+      loginCheck: JSON.parse(cache.get(cache.keys.ky_cache_isAccount)) || false
     }
   },
   created () {
-    let kyCacheIsAccount = JSON.parse(cache.get(cache.keys.ky_cache_isAccount))
-    let kyCacheAccount = cache.get(cache.keys.ky_cache_login_account)
-    this.username = kyCacheIsAccount ? kyCacheAccount : ''
-    this.loginCheck = kyCacheIsAccount
-    console.log(kyCacheAccount, kyCacheIsAccount)
+
   },
   computed: {
-    username () {
-      let kyCacheIsAccount = JSON.parse(cache.get(cache.keys.ky_cache_isAccount))
-      let kyCacheAccount = cache.get(cache.keys.ky_cache_login_account)
-      return kyCacheIsAccount ? kyCacheAccount : ''
-    },
-    loginCheck () {
-      let kyCacheIsAccount = JSON.parse(cache.get(cache.keys.ky_cache_isAccount))
-      return kyCacheIsAccount
-    }
+    ...mapGetters({
+      userInfo: 'userInfo'
+    })
   },
   methods: {
     onBlur (val) {
@@ -123,6 +112,14 @@ export default {
             cache.sessionSet(cache.sessionKeys.ky_cache_memberFlag, _userInfo.memberFlag)
             cache.sessionSet(cache.sessionKeys.ky_cache_isLogined, true)
             cache.sessionSet(cache.sessionKeys.ky_cache_last_login_time, new Date().getTime())
+            this.$store.commit(USER_INFO, {
+              userName: _userInfo.userName,   // 用户帐号
+              memberFlag: _userInfo.memberFlag, // 是否会员
+              realName: _userInfo.realName,   // 真实名称
+              isLogined: true,      // 是否已登录
+              isAccount: this.loginCheck, // 是否记住帐号
+              token: access_token         // 用户token
+            })
             console.log('登录成功')
           } else {
             this.$vux.toast.text(_userInfo.errMsg)

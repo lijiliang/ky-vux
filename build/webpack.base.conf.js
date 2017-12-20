@@ -28,6 +28,7 @@ let webpackConfig = {
       varLess: resolve('src/base/resources/less/variables.less'), // less的一些变量
       common: resolve('src/base/common'),   // common 公用
       api: resolve('src/base/api'),   // api
+      store: resolve('src/store'),    // store
     }
   },
   module: {

@@ -5,15 +5,19 @@
 import * as types from './mutation-types'
 
 const mutations = {
-  [types.NEW_LIST] (state, list) {
-    state.newList = list
-  },
   // 头部标题
   [types.HEADER_TITLE] (state, payload) {
     state.headerTitle = payload.title
   },
-  [types.LOGIN] (state, login) {
-    state.login = login
+
+  // 最新消息列表
+  [types.NEW_LIST] (state, list) {
+    state.newList = list
+  },
+
+  // 用户信息
+  [types.USER_INFO] (state, payload) {
+    state.userInfo = payload
   }
 }
 
